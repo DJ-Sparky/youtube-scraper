@@ -1,13 +1,6 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
-
-function youtubeApi({ endpoint, query }) {
-  let searchParams = new URLSearchParams({
-    ...query,
-    key: process.env.YOUTUBE_API_KEY,
-  });
-  return `https://www.googleapis.com/youtube/v3/${endpoint}?${searchParams.toString()}`;
-}
+import youtubeApi from '../utils/helper.js';
 
 export async function getServerSideProps(ctx) {
   const link = youtubeApi({
