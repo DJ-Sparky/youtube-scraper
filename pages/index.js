@@ -1,23 +1,25 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 
-const YOUTUBE_PLAYLIST_ITEMS_API =
-  'https://www.googleapis.com/youtube/v3/playlistItems'; //stores API endpoint
+function youtubeApi({ endpoint, query }) {
+  let searchParams = new URLSearchParams({
+    ...query,
+    key: process.env.YOUTUBE_API_KEY,
+  });
+  return `https://www.googleapis.com/youtube/v3/${endpoint}?${searchParams.toString()}`;
+}
 
-export async function getServerSideProps() {
-  //snippet:this tells the API we want the snippet
-  //
-
-  const res = await fetch(
-    `${YOUTUBE_PLAYLIST_ITEMS_API}?part=snippet&maxResults=50&playlistId=PL6-aZ2HEYXZrVLoPp9AuGvjKsciYplq0q&key=${process.env.YOUTUBE_API_KEY}`
-  );
-  const data = await res.json(); //transfer to JSON
-  //return data as props in our object
-  return {
-    props: {
-      data,
+export async function getServerSideProps(ctx) {
+  const link = youtubeApi({
+    endpoint: 'playlistItems',
+    query: {
+      part: 'snippet',
+      maxResults: '50',
+      playlistId: 'PLFsfg2xP7cbLuAglQob6zjS4nVbyAfSVV',
     },
-  };
+  });
+  const data = await fetch(link).then((res) => res.json());
+  return { props: { data } };
 }
 
 export default function Home({ data }) {
