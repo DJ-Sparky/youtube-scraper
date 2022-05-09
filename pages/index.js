@@ -15,7 +15,7 @@ export async function getServerSideProps(ctx) {
     query: {
       part: 'snippet',
       maxResults: '50',
-      playlistId: 'PLFsfg2xP7cbLuAglQob6zjS4nVbyAfSVV',
+      playlistId: 'PLurCdizYrXX409OJB1iaxqb236Zu8-opC',
     },
   });
   const data = await fetch(link).then((res) => res.json());
@@ -33,6 +33,30 @@ export default function Home({ data }) {
 
       <main className={styles.main}>
         <h1 className={styles.title}>YT API test</h1>
+
+        <ul className={styles.grid}>
+          {data.items.map(({ id, snippet = {} }) => {
+            const { title, thumbnails = {}, resourceId = {} } = snippet;
+            const { medium } = thumbnails;
+            return (
+              <li key={id} className={styles.card}>
+                <a
+                  href={`https://www.youtube.com/watch?v=${resourceId.videoId}`}
+                >
+                  <p>
+                    <img
+                      width={medium.width}
+                      height={medium.height}
+                      src={medium.url}
+                      alt=''
+                    />
+                  </p>
+                  <h3>{title}</h3>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
       </main>
 
       <footer className={styles.footer}></footer>
