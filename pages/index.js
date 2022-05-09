@@ -30,16 +30,25 @@ export default function Home({ data }) {
         <title>Create Next App</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
-
       <main className={styles.main}>
         <h1 className={styles.title}>YT API test</h1>
 
         <ul className={styles.grid}>
           {data.items.map(({ id, snippet = {} }) => {
-            const { title, thumbnails = {}, resourceId = {} } = snippet;
+            const {
+              title,
+              thumbnails,
+              description = {},
+              resourceId = {},
+            } = snippet;
+
+            let length = 300;
+            let myTruncatedString = description.substring(0, length);
+            console.log({ myTruncatedString });
+
             const { medium } = thumbnails;
             return (
-              <li key={id} className={styles.card}>
+              <li key={id}>
                 <a
                   href={`https://www.youtube.com/watch?v=${resourceId.videoId}`}
                 >
@@ -48,17 +57,17 @@ export default function Home({ data }) {
                       width={medium.width}
                       height={medium.height}
                       src={medium.url}
-                      alt=''
+                      alt={title}
                     />
                   </p>
                   <h3>{title}</h3>
+                  <h4>{myTruncatedString}.. Read more</h4>
                 </a>
               </li>
             );
           })}
         </ul>
       </main>
-
       <footer className={styles.footer}></footer>
     </div>
   );
