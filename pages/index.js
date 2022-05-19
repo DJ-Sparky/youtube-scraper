@@ -15,8 +15,8 @@ export async function getServerSideProps(ctx) {
     endpoint: 'playlistItems',
     query: {
       part: 'snippet',
-      maxResults: '50',
-      playlistId: 'PLurCdizYrXX409OJB1iaxqb236Zu8-opC',
+      maxResults: '10',
+      playlistId: 'PLRY6603I8SKsEAwoYGty0st-79dSzxror',
     },
   })
   const data = await fetch(link).then((res) => res.json())
@@ -24,17 +24,15 @@ export async function getServerSideProps(ctx) {
 }
 
 export default function Home({ data }) {
-  console.log('Home index.js data is:', data)
   return (
-    <div className={styles.container}>
+    <div className='container'>
       <Head>
-        <title>Create Next App</title>
+        <title>Youtube API Test</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <main className={styles.main}>
-        <h1 className={styles.title}>YT API test</h1>
-
-        <ul className={styles.grid}>
+      <main>
+        <h1>YT API test</h1>
+        <ul className='posts'>
           {data.items.map(({ id, snippet = {} }) => {
             const {
               title,
@@ -45,26 +43,39 @@ export default function Home({ data }) {
 
             let length = 300
             let myTruncatedString = description.substring(0, length)
-            console.log({ myTruncatedString })
-
             const { medium } = thumbnails
             return (
               <li key={id}>
-                <p>
-                  <iframe
-                    src={`https://www.youtube.com/embed/${resourceId.videoId}`}
-                    width={medium.width}
-                    height={medium.height}
-                  />
-                  {/* <img
-                    width={medium.width}
-                    height={medium.height}
-                    src={medium.url}
-                    alt={title}
-                  /> */}
-                </p>
-                <h3>{title}</h3>
-                <h4>{myTruncatedString}.. Read more</h4>
+                {/* <div>
+                  <div className='card card-page'>
+                    <iframe
+                      src={`https://www.youtube.com/embed/${resourceId.videoId}`}
+                      allowFullScreen='allowFullScreen'
+                      width={medium.width}
+                      height={medium.height}
+                    />
+                    <p>
+                      <h3 className='post-title'>{title}</h3>
+                      <h4>
+                        {myTruncatedString}.. <br />
+                        Read more
+                      </h4>
+                    </p>
+                  </div>
+                </div> */}
+
+                <a href={`https://www.youtube.com/embed/${resourceId.videoId}`}>
+                  <p>
+                    <img
+                      width={medium.width}
+                      height={medium.height}
+                      src={medium.url}
+                      alt={title}
+                    />
+                  </p>
+                  <h3>{title}</h3>
+                  <h4>{myTruncatedString}.. Read more</h4>
+                </a>
               </li>
             )
           })}
